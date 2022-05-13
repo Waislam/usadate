@@ -19,10 +19,14 @@ class ReadWrite:
             for item in thereader:
                 user_name = item['User Name']
                 pass_word = item['Password']
+                year = item['Year']
+                month = item['Month']
 
 
                 self.data_list.append({'User Name': user_name,
-                                       'Password': pass_word
+                                       'Password': pass_word,
+                                       'Year': year,
+                                       'Month': month
                                        })
 
 

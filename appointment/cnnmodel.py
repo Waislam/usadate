@@ -33,7 +33,7 @@ from keras.layers import Conv2D, Dense, MaxPooling2D, Flatten, Activation
 11. rescaling/feature value reducing rescaling'''
 #==============defining directory path start =============
 DATADIR = os.path.join(r"mydata")
-CATEGORIES = ['bus', 'motorcycle', 'airplane', 'truck', 'bicycle', 'seaplane', 'boat']
+CATEGORIES = ['bus', 'motorcycle', 'airplane', 'truck', 'bicycle', 'seaplane', 'boat', 'train']
 
 data = []
 #try to connect with these above directory
@@ -95,7 +95,7 @@ model.add(MaxPooling2D(pool_size=(2, 2)))
 
 
 model.add(Flatten())
-model.add(Dense(7, activation='softmax'))
+model.add(Dense(8, activation='softmax')) # here the 8 is the label value er list range .. it can take upto 8 label
 
 # optimizer = tf.keras.optimizers.Adam()
 optimizer = "adam"

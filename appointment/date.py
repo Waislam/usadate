@@ -39,7 +39,7 @@ class UsaDate:
         pass
 
     def delay(self):
-        time.sleep(random.randint(2, 4))
+        time.sleep(random.randint(2, 3))
 
     def wait60sec(self, driver):
         driver.implicitly_wait(60)
@@ -61,8 +61,12 @@ class UsaDate:
         with open(filename, 'wb') as f:
             f.write(rq.content)
 
-    def click_on_image(self, driver, header_text):
+    def click_on_image(self, driver):
         ''' this method supposed  to click on hcaptcha images'''
+        time.sleep(1.5)
+        header_text = driver.find_element(By.XPATH, "//div[@class='prompt-text']").text.strip().split(' ')[-1].strip()
+        print(header_text)
+
         wrapper_list = driver.find_elements(By.XPATH, "//div[@class='task-image']")
 
         for wrapper in wrapper_list:
@@ -76,10 +80,10 @@ class UsaDate:
             rs = ls.rstrip(') no-repeat scroll 50% 50% / 123.333px 123.333px padding-box border-b')
             src = rs.strip('"')
 
-            time.sleep(1)
+            time.sleep(0.1)
             self.download_img(src)
             ###################################################### check from here
-            time.sleep(2)
+            time.sleep(1)
             img_id = str(self.cnnsol())
             print('Everything working')
             img_id = img_id.strip()
@@ -136,6 +140,13 @@ class UsaDate:
                     print('clicked')
                     time.sleep(1)
 
+            elif header_text == 'train':
+                print('train')
+                if img_id == '7':
+                    wrapper.click()
+                    print('clicked')
+                    time.sleep(1)
+
             else:
                 print('else close executed')
                 continue;
@@ -168,29 +179,39 @@ class UsaDate:
         iframe_image = driver.find_element(By.XPATH, "//iframe[@title='Main content of the hCaptcha challenge']")
         driver.switch_to.frame(iframe_image) # switched to the captcha image content
         driver.implicitly_wait(5)
-        self.delay()
-        header_text = driver.find_element(By.XPATH, "//div[@class='prompt-text']").text.strip().split(' ')[-1].strip()
-        print(header_text)
+        # self.delay()
+        # header_text = driver.find_element(By.XPATH, "//div[@class='prompt-text']").text.strip().split(' ')[-1].strip()
+        # print(header_text)
         #clear till this line
         self.delay()
-        self.click_on_image(driver, header_text)
-        #value_of_css_property("background-image")
-        # bg_url = div.value_of_css_property('background-image')  # 'url("https://i.xxxx.com/img.jpg")'
-        # # strip the string to leave just the URL part
-        # bg_url = bg_url.lstrip('url("').rstrip('")')
-        # https://i.xxxx.com/img.jpg
+        while True:
+            try:
+                time.sleep(2)
+                driver.implicitly_wait(5)
+                self.click_on_image(driver)
+                #value_of_css_property("background-image")
+                # bg_url = div.value_of_css_property('background-image')  # 'url("https://i.xxxx.com/img.jpg")'
+                # # strip the string to leave just the URL part
+                # bg_url = bg_url.lstrip('url("').rstrip('")')
+                # https://i.xxxx.com/img.jpg
 
-        time.sleep(3)
-        next_challenge = driver.find_element(By.XPATH, "//div[@title='Next Challenge']")
-        next_challenge.click()
-        driver.implicitly_wait(5)
-        self.delay()
-        self.click_on_image(driver, header_text)
-        driver.implicitly_wait(5)
-        self.delay()
-        verify_button = driver.find_element(By.XPATH, "//div[@title='Submit Answers']")
-        verify_button.click()
-        time.sleep(5)
+                time.sleep(3)
+                next_challenge = driver.find_element(By.XPATH, "//div[@title='Next Challenge']")
+                next_challenge.click()
+                driver.implicitly_wait(5)
+                self.delay()
+                self.click_on_image(driver)
+                driver.implicitly_wait(5)
+                self.delay()
+                verify_button = driver.find_element(By.XPATH, "//div[@title='Submit Answers']")
+                verify_button.click()
+                print('verified button is clicked')
+            except:
+                print('no more captcha')
+                # print(e)
+                break;
+
+        time.sleep(1)
 
 
     def login(self, user_name, pass_word, driver):
@@ -205,7 +226,7 @@ class UsaDate:
         password = driver.find_element(By.XPATH, "//input[@type='password']")
         time.sleep(2)
         password.send_keys(pass_word)
-        time.sleep(5)
+        time.sleep(2)
         pg.moveTo(1006, 645, 2) # go to the policy checkbox
         driver.find_element(By.XPATH, "//input[@type='checkbox']").click()  # click on check box
         #form data mission country name
@@ -226,9 +247,9 @@ class UsaDate:
             self.delay()
             try:
                 self.hcapsolution(driver)
-            except Exception as e:
-                print(e)
-                time.sleep(5)
+            except:
+                print('There is no captcha or captcha is solved')
+                time.sleep(2)
                 break;
         driver.switch_to.default_content()
         ##########===========================captcha solve start===============
@@ -246,7 +267,7 @@ class UsaDate:
         time.sleep(2)
         driver.find_element(By.XPATH, "//input[@id='thePage:SiteTemplate:theForm:addItem']").click()
 
-    def repeat_work(self, driver):
+    def repeat_work(self, driver, year, month):
         # first click on reschedule link
         self.wait60sec(driver)
         self.delay()
@@ -259,12 +280,18 @@ class UsaDate:
 
         #  Now search for the desired month value
         while True:
+            time.sleep(1)
+            try:
+                self.hcapsolution(driver)
+            except:
+                print('go forward')
+
             try:
                 first_group = driver.find_element(By.XPATH, "//div[@class='ui-datepicker-group ui-datepicker-group-first']")
                 year_value = first_group.find_element(By.XPATH, "//span[@class='ui-datepicker-year']").text.strip()
-                if year_value == '2022':
+                if year_value == year:
                     month_value = first_group.find_element(By.XPATH, "//span[@class='ui-datepicker-month']").text.strip()
-                    if month_value == 'April':
+                    if month_value == month:
                         date_list = first_group.find_elements(By.XPATH, "//td[@class=' ']")
 
                         #click on first date from this month
@@ -289,7 +316,7 @@ class UsaDate:
 
 
 
-    def pickdate(self, user_name, pass_word):
+    def pickdate(self, user_name, pass_word, year, month):
         driver = webdriver.Chrome(service=self.service_obj, options=self.options)
         driver.maximize_window()
 
@@ -298,7 +325,7 @@ class UsaDate:
         self.login(user_name, pass_word, driver) # loggedIn from here
         driver.get_cookies()
         time.sleep(10)
-        self.repeat_work(driver)
+        self.repeat_work(driver, year, month)
         self.pick_time(driver)
         data = [user_name, pass_word]
         write_result(data)
@@ -312,13 +339,15 @@ class UsaDate:
             #     continue
             user_name = line['User Name'].strip()
             pass_word = line['Password'].strip()
+            year = line['Year'].strip()
+            month = line['Month'].strip()
 
             # starting here
-            t = threading.Thread(target=self.pickdate, args=(user_name, pass_word))
+            t = threading.Thread(target=self.pickdate, args=(user_name, pass_word, year, month))
             # time.sleep(3)
             t.start()
             time.sleep(30)
-            break;
+            # break;
 
 
 
