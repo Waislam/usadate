@@ -75,16 +75,13 @@ class UsaDate:
             # rs = ls.rstrip('") no-repeat scroll 50% 50% / 123.333px 123.333px padding-box border-b')
             rs = ls.rstrip(') no-repeat scroll 50% 50% / 123.333px 123.333px padding-box border-b')
             src = rs.strip('"')
-            print(src)
 
-            time.sleep(2)
+            time.sleep(1)
             self.download_img(src)
-            print('img downloaded')
             ###################################################### check from here
             time.sleep(2)
             img_id = str(self.cnnsol())
-            print(type(img_id))
-            print('hello')
+            print('Everything working')
             img_id = img_id.strip()
             print(img_id)
 
@@ -95,49 +92,49 @@ class UsaDate:
                 if img_id == '0':
                     wrapper.click()
                     print('clicked')
-                    time.sleep(3)
+                    time.sleep(1)
 
             elif header_text == 'motorcycle':
                 print('motorcycle')
                 if img_id == '1':
                     wrapper.click()
                     print('clicked')
-                    time.sleep(3)
+                    time.sleep(1)
 
             elif header_text == 'airplane':
                 print('airplane')
                 if img_id == '2':
                     wrapper.click()
                     print('clicked')
-                    time.sleep(3)
+                    time.sleep(1)
 
             elif header_text == 'truck':
                 print('truck')
                 if img_id == '3':
                     wrapper.click()
                     print('clicked')
-                    time.sleep(3)
+                    time.sleep(1)
 
             elif header_text == 'bicycle':
                 print('bicycle')
                 if img_id == '4':
                     wrapper.click()
                     print('clicked')
-                    time.sleep(3)
+                    time.sleep(1)
 
             elif header_text == 'seaplane':
                 print('seaplane')
                 if img_id == '5':
                     wrapper.click()
                     print('clicked')
-                    time.sleep(3)
+                    time.sleep(1)
 
             elif header_text == 'boat':
                 print('boat')
                 if img_id == '6':
                     wrapper.click()
                     print('clicked')
-                    time.sleep(3)
+                    time.sleep(1)
 
             else:
                 print('else close executed')

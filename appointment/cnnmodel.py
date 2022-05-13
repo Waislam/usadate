@@ -109,7 +109,7 @@ model.compile(loss=loss,
 
 ####################train now
 model.fit(x, y,
-        # batch_size=128,
+        batch_size=20,
         epochs=25, #how many times trainning will be done
         # validation_data=(x_test, y_test))
         validation_split=0.1)
