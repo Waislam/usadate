@@ -21,12 +21,14 @@ class ReadWrite:
                 pass_word = item['Password']
                 year = item['Year']
                 month = item['Month']
+                month2 = item['Month2']
 
 
                 self.data_list.append({'User Name': user_name,
                                        'Password': pass_word,
                                        'Year': year,
-                                       'Month': month
+                                       'Month': month,
+                                       'Month2': month2
                                        })
 
 

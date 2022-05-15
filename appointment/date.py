@@ -162,8 +162,8 @@ class UsaDate:
         # self.delay()
         time.sleep(2)
         check_box = driver.find_element(By.XPATH, "//div[@id='checkbox']")
-        print(pg.position()) #Point(x=732, y=715)
-        pg.moveTo(732, 715, 1)
+        #print(pg.position()) #Point(x=732, y=715)
+        #pg.moveTo(732, 715, 1)
         check_box.click() # clicked on the check box of hcaptcha
 
 
@@ -227,7 +227,7 @@ class UsaDate:
         time.sleep(2)
         password.send_keys(pass_word)
         time.sleep(2)
-        pg.moveTo(1006, 645, 2) # go to the policy checkbox
+        #pg.moveTo(1006, 645, 2) # go to the policy checkbox
         driver.find_element(By.XPATH, "//input[@type='checkbox']").click()  # click on check box
         #form data mission country name
         # mission = driver.find_element(By.XPATH, "//input[@id='Mission']")
@@ -267,7 +267,7 @@ class UsaDate:
         time.sleep(2)
         driver.find_element(By.XPATH, "//input[@id='thePage:SiteTemplate:theForm:addItem']").click()
 
-    def repeat_work(self, driver, year, month):
+    def repeat_work(self, driver, year, month, month2):
         # first click on reschedule link
         self.wait60sec(driver)
         self.delay()
@@ -282,16 +282,30 @@ class UsaDate:
         while True:
             time.sleep(1)
             try:
-                self.hcapsolution(driver)
-            except:
-                print('go forward')
+                # try:
+                #     while True:
+                #         error = driver.find_element(By.XPATH, "//span[@style='font-family: Verdana; font-size: medium; font-weight: bold;']").text.strip()
+                #         if error == 'We are down for maintenance.':
+                #             time.sleep(30)
+                #             driver.refresh()
+                # except:
+                while True:
+                    try:
+                        self.hcapsolution(driver)
+                        driver.switch_to.default_content()
+                        time.sleep(1)
+                        driver.find_element(By.XPATH, "//input[@class='button']").click()
+                        time.sleep(2)
+                    except:
+                        break;
 
-            try:
                 first_group = driver.find_element(By.XPATH, "//div[@class='ui-datepicker-group ui-datepicker-group-first']")
                 year_value = first_group.find_element(By.XPATH, "//span[@class='ui-datepicker-year']").text.strip()
+                print('working till here')
                 if year_value == year:
+                    print(year)
                     month_value = first_group.find_element(By.XPATH, "//span[@class='ui-datepicker-month']").text.strip()
-                    if month_value == month:
+                    if month_value == month or month_value == month2:
                         date_list = first_group.find_elements(By.XPATH, "//td[@class=' ']")
 
                         #click on first date from this month
@@ -306,7 +320,9 @@ class UsaDate:
                         #         break;
             except:
                 time.sleep(30)
+                print('what is happennig here')
                 # driver.refresh()
+                reschedule_button = driver.find_element(By.XPATH, "//li/a[text()='Reschedule Appointment']")
                 reschedule_button.click()
 
 
@@ -316,7 +332,7 @@ class UsaDate:
 
 
 
-    def pickdate(self, user_name, pass_word, year, month):
+    def pickdate(self, user_name, pass_word, year, month, month2):
         driver = webdriver.Chrome(service=self.service_obj, options=self.options)
         driver.maximize_window()
 
@@ -325,7 +341,7 @@ class UsaDate:
         self.login(user_name, pass_word, driver) # loggedIn from here
         driver.get_cookies()
         time.sleep(10)
-        self.repeat_work(driver, year, month)
+        self.repeat_work(driver, year, month, month2)
         self.pick_time(driver)
         data = [user_name, pass_word]
         write_result(data)
@@ -341,13 +357,14 @@ class UsaDate:
             pass_word = line['Password'].strip()
             year = line['Year'].strip()
             month = line['Month'].strip()
+            month2 = line['Month2'].strip()
 
             # starting here
-            t = threading.Thread(target=self.pickdate, args=(user_name, pass_word, year, month))
+            t = threading.Thread(target=self.pickdate, args=(user_name, pass_word, year, month, month2))
             # time.sleep(3)
             t.start()
             time.sleep(30)
-            # break;
+            break;
 
 
 
