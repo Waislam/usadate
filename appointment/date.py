@@ -267,7 +267,7 @@ class UsaDate:
         time.sleep(2)
         driver.find_element(By.XPATH, "//input[@id='thePage:SiteTemplate:theForm:addItem']").click()
 
-    def repeat_work(self, driver, year, month, month2):
+    def repeat_work(self, driver, year, month, month2, month3):
         # first click on reschedule link
         self.wait60sec(driver)
         self.delay()
@@ -306,7 +306,7 @@ class UsaDate:
                 if year_value == year:
                     print(year)
                     month_value = first_group.find_element(By.XPATH, "//span[@class='ui-datepicker-month']").text.strip()
-                    if month_value == month or month_value == month2:
+                    if month_value == month or month_value == month2 or month_value == month3:
                         date_list = first_group.find_elements(By.XPATH, "//td[@class=' ']")
 
                         #click on first date from this month
@@ -333,7 +333,7 @@ class UsaDate:
 
 
 
-    def pickdate(self, user_name, pass_word, year, month, month2):
+    def pickdate(self, user_name, pass_word, year, month, month2, month3):
         driver = webdriver.Chrome(service=self.service_obj, options=self.options)
         driver.maximize_window()
 
@@ -342,7 +342,7 @@ class UsaDate:
         self.login(user_name, pass_word, driver) # loggedIn from here
         driver.get_cookies()
         time.sleep(10)
-        self.repeat_work(driver, year, month, month2)
+        self.repeat_work(driver, year, month, month2, month3)
         self.pick_time(driver)
         data = [user_name, pass_word]
         write_result(data)
@@ -359,9 +359,10 @@ class UsaDate:
             year = line['Year'].strip()
             month = line['Month'].strip()
             month2 = line['Month2'].strip()
+            month3 = line['Month3'].strip()
 
             # starting here
-            t = threading.Thread(target=self.pickdate, args=(user_name, pass_word, year, month, month2))
+            t = threading.Thread(target=self.pickdate, args=(user_name, pass_word, year, month, month2, month3))
             # time.sleep(3)
             t.start()
             time.sleep(30)

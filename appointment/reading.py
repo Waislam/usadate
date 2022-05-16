@@ -22,13 +22,15 @@ class ReadWrite:
                 year = item['Year']
                 month = item['Month']
                 month2 = item['Month2']
+                month3 = item['Month3']
 
 
                 self.data_list.append({'User Name': user_name,
                                        'Password': pass_word,
                                        'Year': year,
                                        'Month': month,
-                                       'Month2': month2
+                                       'Month2': month2,
+                                       'Month3': month3
                                        })
 
 
