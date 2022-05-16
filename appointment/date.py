@@ -297,6 +297,7 @@ class UsaDate:
                         driver.find_element(By.XPATH, "//input[@class='button']").click()
                         time.sleep(2)
                     except:
+                        print('repeat captcha not here')
                         break;
 
                 first_group = driver.find_element(By.XPATH, "//div[@class='ui-datepicker-group ui-datepicker-group-first']")
