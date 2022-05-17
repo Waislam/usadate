@@ -4,6 +4,7 @@ import os
 import time
 import requests
 
+import undetected_chromedriver as uc
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
@@ -22,18 +23,18 @@ import pyautogui as pg # this is for mouse move and take action like human pip i
 from appointment.mycnn import Capsol
 
 class UsaDate:
-    service_obj = Service(ChromeDriverManager().install())
+    # service_obj = Service(ChromeDriverManager().install())
     # service_obj = Service(os.path.join('appointment/chromedriver.exe'))
-    options = Options()
+    # options = Options()
 
-    options.add_experimental_option("excludeSwitches", ["enable-automation"])  # one
-    options.add_experimental_option('useAutomationExtension', False)  # two
-    options.add_argument('--disable-blink-features=AutomationControlled')  # three  these three option is called "Removing Navigator.Webdriver Flag"
-    options.add_argument('--disable-notifications')  # one this is to stop showing notificationn like "Save password" (working)
-    prefs = {"profile.default_content_setting_values.notifications": 2}  # two
-    options.add_experimental_option("prefs", prefs)  # three above three lines of code ignoring the "Save password" popup from chrome (called browser notifictaion)
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
+    # options.add_experimental_option("excludeSwitches", ["enable-automation"])  # one
+    # options.add_experimental_option('useAutomationExtension', False)  # two
+    # options.add_argument('--disable-blink-features=AutomationControlled')  # three  these three option is called "Removing Navigator.Webdriver Flag"
+    # options.add_argument('--disable-notifications')  # one this is to stop showing notificationn like "Save password" (working)
+    # prefs = {"profile.default_content_setting_values.notifications": 2}  # two
+    # options.add_experimental_option("prefs", prefs)  # three above three lines of code ignoring the "Save password" popup from chrome (called browser notifictaion)
+    # options.add_argument('--no-sandbox')
+    # options.add_argument('--disable-dev-shm-usage')
 
     def __init__(self):
         pass
@@ -334,7 +335,8 @@ class UsaDate:
 
 
     def pickdate(self, user_name, pass_word, year, month, month2, month3):
-        driver = webdriver.Chrome(service=self.service_obj, options=self.options)
+        # driver = webdriver.Chrome(service=self.service_obj, options=self.options)
+        driver = uc.Chrome()
         driver.maximize_window()
 
         self.wait60sec(driver)
